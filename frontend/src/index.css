@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  @apply bg-ink-950 text-bone-100 font-sans antialiased;
+  /* faint lab-bench grid */
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-attachment: fixed;
+}
+
+::selection { background: #f5b84a; color: #08090b; }
+
+@layer components {
+  .eyebrow { @apply font-mono text-[11px] uppercase tracking-[0.22em] text-bone-500; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-lab px-6 py-3 font-mono text-sm font-medium
+           uppercase tracking-wider text-ink-950 transition hover:bg-[#ffc968] focus:outline-none
+           focus-visible:ring-2 focus-visible:ring-lab focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950
+           disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-ink-500 px-4 py-2 font-mono text-xs
+           uppercase tracking-wider text-bone-300 transition hover:border-bone-500 hover:text-bone-100
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-lab disabled:opacity-40;
+  }
+  .field {
+    @apply w-full rounded-sm border border-ink-600 bg-ink-900 px-3 py-2.5 text-bone-100 placeholder:text-bone-700
+           focus:border-lab focus:outline-none focus:ring-1 focus:ring-lab;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
