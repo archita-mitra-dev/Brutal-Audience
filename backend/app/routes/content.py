@@ -1,9 +1,10 @@
 """Content endpoints: segment preview, upload parsing, saved submissions."""
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from .. import db
 from ..config import get_settings
 from ..file_parser import UnsupportedFile, extract_text
+from ..security import current_user
 from ..schemas import (
     SegmentOut,
     SegmentRequest,
@@ -15,7 +16,7 @@ from ..schemas import (
 )
 from ..segmenter import segment_content
 
-router = APIRouter(prefix="/api", tags=["content"])
+router = APIRouter(prefix="/api", tags=["content"], dependencies=[Depends(current_user)])
 
 
 def _to_out(segments) -> list[SegmentOut]:
@@ -59,13 +60,13 @@ async def upload_file(file: UploadFile = File(...)) -> UploadResponse:
 
 
 @router.post("/submissions", response_model=SubmissionOut, status_code=201)
-def create_submission(req: SubmissionCreate) -> SubmissionOut:
+def create_submission(req: SubmissionCreate, user: dict = Depends(current_user)) -> SubmissionOut:
     """Save a work exactly as written, together with its segments."""
     _check_length(req.content)
     segments, _ = segment_content(req.content, req.content_type, get_settings().max_segments)
     if not segments:
         raise HTTPException(422, "Nothing to test: the content is empty.")
-    saved = db.create_submission(req.title.strip(), req.content_type, req.content, segments)
+    saved = db.create_submission(user["id"], req.title.strip(), req.content_type, req.content, segments)
     return SubmissionOut(**{**saved, "segments": _to_out_dicts(saved["segments"])})
 
 
@@ -74,19 +75,19 @@ def _to_out_dicts(rows: list[dict]) -> list[SegmentOut]:
 
 
 @router.get("/submissions", response_model=list[SubmissionSummary])
-def list_submissions():
-    return db.list_submissions()
+def list_submissions(user: dict = Depends(current_user)):
+    return db.list_submissions(user["id"])
 
 
 @router.get("/submissions/{sub_id}", response_model=SubmissionOut)
-def get_submission(sub_id: str) -> SubmissionOut:
-    saved = db.get_submission(sub_id)
+def get_submission(sub_id: str, user: dict = Depends(current_user)) -> SubmissionOut:
+    saved = db.get_owned_submission(sub_id, user["id"])
     if saved is None:
         raise HTTPException(404, "Submission not found.")
     return SubmissionOut(**{**saved, "segments": _to_out_dicts(saved["segments"])})
 
 
 @router.delete("/submissions/{sub_id}", status_code=204)
-def delete_submission(sub_id: str) -> None:
-    if not db.delete_submission(sub_id):
+def delete_submission(sub_id: str, user: dict = Depends(current_user)) -> None:
+    if not db.delete_submission(sub_id, user["id"]):
         raise HTTPException(404, "Submission not found.")

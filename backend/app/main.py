@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import db, run_store
 from .config import get_settings
-from .routes import analysis, content, runs
+from .routes import analysis, auth, content, runs
 
 
 @asynccontextmanager
@@ -25,6 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(content.router)
 app.include_router(runs.router)
 app.include_router(analysis.router)
@@ -35,7 +36,7 @@ def health() -> dict:
     s = get_settings()
     return {
         "status": "ok",
-        "phase": 4,
+        "phase": 8,
         # Lets the frontend show "demo mode" later. Never returns the key itself.
         "llm_configured": s.llm_configured,
         "mode_default": "live" if s.llm_configured else "demo",

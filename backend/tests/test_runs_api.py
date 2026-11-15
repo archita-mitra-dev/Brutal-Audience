@@ -7,6 +7,8 @@ from fastapi.testclient import TestClient
 
 from app.config import get_settings
 
+from .helpers import authenticate
+
 BODY = {
     "title": "The Dark Lighthouse",
     "content_type": "story",
@@ -29,6 +31,7 @@ def client(monkeypatch):
     from app.main import app
 
     with TestClient(app) as c:
+        authenticate(c)
         yield c
     get_settings.cache_clear()
     for ext in ("", "-wal", "-shm"):
@@ -51,7 +54,7 @@ def wait_done(client, run_id, timeout=15):
 def test_health_reports_demo_default_without_key(client):
     h = client.get("/api/health").json()
     assert h["llm_configured"] is False and h["mode_default"] == "demo"
-    assert h["phase"] == 4
+    assert h["phase"] == 8
 
 
 def test_full_demo_run(client):

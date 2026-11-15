@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import AudienceTheatre from '../components/AudienceTheatre'
+import BlindBadge from '../components/BlindBadge'
 import Dashboard from '../components/Dashboard'
 import ModeBanner from '../components/ModeBanner'
 import PersonaLanes from '../components/PersonaLanes'
@@ -58,7 +60,7 @@ export default function RunPage() {
     <main className="mx-auto max-w-6xl px-5 py-10">
       <p className="eyebrow">Step 3 of 3 · {finished ? 'Results' : 'The reading room'}</p>
       <h1 className="mt-2 font-display text-3xl sm:text-4xl">“{run.title}”</h1>
-      <div className="mt-4"><ModeBanner mode={run.mode} model={run.model} /></div>
+      <div className="mt-4 space-y-3"><ModeBanner mode={run.mode} model={run.model} /><BlindBadge blind={run.blind} /></div>
 
       {/* progress */}
       <section aria-label="Simulation progress" className="mt-6">
@@ -92,8 +94,15 @@ export default function RunPage() {
         </>
       ) : (
         <>
+      {/* theatre */}
+      <section className="mt-8" aria-label="Live audience theatre">
+        <p className="eyebrow mb-3">The audience, live</p>
+        <AudienceTheatre segments={segments} reactions={reactions} mode="live" running={!finished} />
+      </section>
+
       {/* lanes */}
-      <section className="mt-8" aria-label="Audience lanes">
+      <section className="mt-10" aria-label="Audience lanes">
+        <p className="eyebrow mb-3">Reading progress</p>
         <PersonaLanes
           segments={segments}
           reactions={reactions}

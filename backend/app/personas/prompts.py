@@ -99,8 +99,10 @@ def _already_left(req: ReactionRequest) -> str:
 def build_user_prompt(req: ReactionRequest) -> str:
     # Title and content type are what any real reader sees on the cover; they carry no
     # unseen text, so they are safe to include.
+    # Blind Audience Test: an empty title means the creator's title is withheld.
+    name = f'"{req.title}"' if req.title.strip() else "Untitled"
     prompt = (
-        f"WORK: \"{req.title}\" (type: {req.content_type})\n\n"
+        f"WORK: {name} (type: {req.content_type})\n\n"
         f"=== WHAT YOU HAVE ALREADY READ ===\n{_seen_block(req)}\n\n"
         f"=== YOUR OWN EARLIER REACTIONS ===\n{_history_block(req)}\n"
         f"{_already_left(req)}\n"

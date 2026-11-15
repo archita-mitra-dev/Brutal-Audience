@@ -6,6 +6,8 @@ from fastapi.testclient import TestClient
 
 from app.config import get_settings
 
+from .helpers import authenticate
+
 
 @pytest.fixture()
 def client(monkeypatch):
@@ -16,6 +18,7 @@ def client(monkeypatch):
     from app.main import app
 
     with TestClient(app) as c:
+        authenticate(c)
         yield c
     get_settings.cache_clear()
     os.unlink(tmp.name)

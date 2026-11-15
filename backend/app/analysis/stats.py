@@ -11,6 +11,9 @@ from typing import Iterable
 
 from ..personas.definitions import PERSONAS, PERSONAS_BY_KEY
 from ..schemas import ReactionOut
+from .dropoff import build_dropoff
+from .meter import build_meter
+from .split import build_split
 from .models import (
     Agreement, Analysis, Collision, DropOff, Participant, PersonaStat, SegmentStat,
 )
@@ -159,12 +162,21 @@ def analyse(
             agreements.append(Agreement(segment_id=st.segment_id, label=st.label, kind="shared_low", mean=st.mean))
 
     all_scores = [r.engagement_score for r in ok]
+    overall = round(sum(all_scores) / len(all_scores), 2) if all_scores else None  # type: ignore[arg-type]
+    # Personas who read everything they were given without once wanting to stop.
+    never_stopped = [
+        ps.persona for ps in persona_stats
+        if ps.n_ok > 0 and ps.first_stop_segment is None
+    ]
     return Analysis(
         run_id=run_id, status=status,
         partial=status != "completed" or len(reactions) < total_steps,
-        overall_mean=round(sum(all_scores) / len(all_scores), 2) if all_scores else None,  # type: ignore[arg-type]
+        overall_mean=overall,
         strongest_segment_id=strongest.segment_id if strongest else None,
         weakest_segment_id=weakest.segment_id if weakest else None,
         segments=seg_stats, personas=persona_stats, drop_offs=drop_offs,
         lost_attention=lost, collisions=collisions, agreements=agreements,
+        meter=build_meter(seg_stats, overall, never_stopped, LOW_SCORE),
+        dropoff=build_dropoff(segments, ok),
+        split=build_split(segments, ok),
     )

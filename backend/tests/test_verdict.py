@@ -10,6 +10,8 @@ from fastapi.testclient import TestClient
 from app.analysis.stats import analyse
 from app.analysis.verdict import VerdictError, generate_demo, generate_live
 from app.config import get_settings
+
+from .helpers import authenticate
 from app.llm.base import LLMError
 from app.personas.definitions import PERSONAS_BY_KEY
 from app.schemas import ReactionOut
@@ -139,6 +141,7 @@ def client(monkeypatch):
     get_settings.cache_clear()
     from app.main import app
     with TestClient(app) as c:
+        authenticate(c)
         yield c
     get_settings.cache_clear()
     for ext in ("", "-wal", "-shm"):

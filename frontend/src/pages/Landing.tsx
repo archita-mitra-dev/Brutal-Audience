@@ -3,11 +3,20 @@ import SimulationPreview from '../components/SimulationPreview'
 import { PERSONAS } from '../lib/personas'
 
 const STEPS = [
-  { n: '01', title: 'Submit your draft', body: 'Paste it or upload a .txt / .docx. It is stored exactly as written — never edited.' },
-  { n: '02', title: 'We split it into segments', body: 'Paragraphs, scenes or stanzas — each with an ID and its exact original text. You can inspect them first.' },
-  { n: '03', title: 'The audience reads, in order', body: 'Each persona meets one segment at a time and reacts before seeing the next. No peeking at the ending.' },
-  { n: '04', title: 'You get the verdict', body: 'A heatmap of attention, where the audience splits, and three specific, evidence-linked notes.' },
+  { n: '01', title: 'Submit your work', body: 'Paste or upload a story, screenplay, lyrics or article. It is stored exactly as written and never edited.' },
+  { n: '02', title: 'Watch your audience', body: 'Four AI personas read it one segment at a time, with live reactions in the audience theatre. No peeking at the ending.' },
+  { n: '03', title: 'See where you lose them', body: 'Interactive heatmap, Brutality Meter, retention curve and the exact sentence behind each predicted drop-off.' },
+  { n: '04', title: 'Understand the disagreement', body: 'The split detector explains why a genre fan loves what a casual newcomer cannot follow, instead of hiding it in an average.' },
+  { n: '05', title: 'Get your Brutal Verdict', body: 'Strengths, weaknesses, verbatim evidence and three specific, segment-linked things to look at.' },
+  { n: '06', title: 'Experiment with revisions', body: 'Submit version 2 or ask "what if the opening were shorter?" and see what improved, what weakened and what was resolved.' },
 ]
+
+const FEATURES = [
+  ['Live Audience Theatre', 'Watch the four readers react as it happens.'],
+  ['Brutality Meter', 'Fixed, published thresholds. No model decides the label.'],
+  ['Blind Audience Test', 'Personas never see your name, your intent or the ending.'],
+  ['What If?', 'Hypothetical edits, clearly labelled as simulations.'],
+] as const
 
 export default function Landing() {
   return (
@@ -19,6 +28,7 @@ export default function Landing() {
           <h1 className="mt-5 max-w-4xl animate-rise font-display text-5xl font-semibold leading-[1.02] tracking-tight [animation-delay:80ms] sm:text-7xl">
             Rehearse your audience <em className="font-normal italic text-lab">before</em> you meet them.
           </h1>
+          <p className="mt-4 font-mono text-sm uppercase tracking-[0.18em] text-bone-300 animate-rise [animation-delay:120ms]">Four perspectives. Zero sugarcoating.</p>
           <p className="mt-7 max-w-2xl animate-rise text-lg leading-relaxed text-bone-300 [animation-delay:160ms]">
             Brutal Audience puts your draft in front of a panel of simulated readers. They react as they go,
             paragraph by paragraph, and tell you where they leaned in, got lost, or walked out.
@@ -61,7 +71,7 @@ export default function Landing() {
         </h2>
         <div className="mt-10"><SimulationPreview /></div>
 
-        <ol className="mt-12 grid gap-px bg-ink-700/60 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-12 grid gap-px bg-ink-700/60 sm:grid-cols-2 lg:grid-cols-3">
           {STEPS.map((s) => (
             <li key={s.n} className="bg-ink-950 p-6">
               <span className="font-mono text-xs text-lab">{s.n}</span>
@@ -70,6 +80,16 @@ export default function Landing() {
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* FEATURES */}
+      <section className="mx-auto grid max-w-6xl gap-px bg-ink-700/60 px-0 sm:grid-cols-2 sm:px-5 lg:grid-cols-4">
+        {FEATURES.map(([t, d]) => (
+          <div key={t} className="bg-ink-950 p-6">
+            <h3 className="font-display text-lg text-lab">{t}</h3>
+            <p className="mt-2 text-sm text-bone-500">{d}</p>
+          </div>
+        ))}
       </section>
 
       {/* PERSONAS */}
@@ -99,7 +119,7 @@ export default function Landing() {
           “It does not create the art. It helps creators understand the people who experience it.”
         </p>
         <p className="mx-auto mt-6 max-w-xl text-sm text-bone-500">
-          Simulated personas are an informed guess, not a guarantee. Treat scores as a conversation starter, not a measurement.
+          These are simulated audience reactions and predicted drop-off points, not measured audience retention. Treat scores as a conversation starter, not a measurement.
         </p>
         <Link to="/workspace" className="btn-primary mt-10">Test your work →</Link>
       </section>

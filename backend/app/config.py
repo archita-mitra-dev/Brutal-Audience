@@ -16,6 +16,17 @@ class Settings(BaseSettings):
     max_content_chars: int = 60_000
     max_segments: int = 80
 
+    # --- Auth (Phase 5) ------------------------------------------------------
+    # Signing key for login tokens. In production set a long random value
+    # (e.g. `python -c "import secrets; print(secrets.token_urlsafe(48))"`).
+    # If empty, a random key is generated per process: fine for local dev, but
+    # everyone is logged out whenever the server restarts.
+    jwt_secret: str = ""
+    jwt_expire_minutes: int = 60 * 24 * 7
+    allow_registration: bool = True
+    login_max_failures: int = 5
+    login_window_s: int = 300
+
     # --- LLM (Phase 2) -------------------------------------------------------
     # "gemini" (Google Generative Language API) or "openai_compat" (any
     # OpenAI-style /chat/completions endpoint: OpenAI, Groq, OpenRouter, ...).

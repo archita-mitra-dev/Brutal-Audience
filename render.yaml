@@ -18,5 +18,7 @@ services:
         sync: false
       - key: CORS_ORIGINS     # your Vercel URL, e.g. https://brutal-audience.vercel.app
         sync: false
+      - key: JWT_SECRET       # signs login tokens; Render generates a random value once
+        generateValue: true
       - key: DATABASE_PATH
         value: ./brutal_audience.db

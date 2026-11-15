@@ -143,15 +143,21 @@ async def run_simulation(
     on_reaction: Callable[[ReactionOut], None],
     stop: asyncio.Event,
     max_retries: int = 2,
+    blind: bool = False,
 ) -> tuple[str, str | None]:
-    """Run all personas. Returns (final_status, error_message)."""
+    """Run all personas. Returns (final_status, error_message).
+
+    blind=True is the Blind Audience Test: the title is withheld from every persona. The
+    reading itself is blind in every run (no author identity, no explanation, no later text).
+    """
     segments = [Segment(**s) for s in submission["segments"]]
+    title = "" if blind else submission["title"]
     fatal: list[str] = []
 
     async def one(p: Persona) -> None:
         try:
             await run_persona(
-                p, submission["title"], submission["content_type"], segments,
+                p, title, submission["content_type"], segments,
                 backend, on_reaction, stop, max_retries,
             )
         except FatalLLMError as exc:

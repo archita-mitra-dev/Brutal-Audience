@@ -1,8 +1,15 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { api, ApiError, type Analysis, type RunDetail } from '../lib/api'
+import AudienceTheatre from './AudienceTheatre'
+import BrutalityMeter from './BrutalityMeter'
+import ComparePanel from './ComparePanel'
 import CollisionPanel from './CollisionPanel'
 import EngagementChart from './EngagementChart'
 import Heatmap from './Heatmap'
+import RevisionLab from './RevisionLab'
+import RetentionCurve from './RetentionCurve'
+import SplitDetector from './SplitDetector'
 import SegmentCompare from './SegmentCompare'
 import VerdictPanel from './VerdictPanel'
 
@@ -53,6 +60,13 @@ export default function Dashboard({ run }: { run: RunDetail }) {
 
   return (
     <div className="mt-10 space-y-14">
+      {run.baseline_run_id && (
+        <section aria-labelledby="rev-h">
+          <h2 id="rev-h" className="mb-4 font-display text-2xl">{run.kind === 'whatif' ? 'What if: how it compares' : 'Revision impact'}</h2>
+          <ComparePanel runId={run.id} />
+          <Link to={`/run/${run.baseline_run_id}`} className="btn-ghost mt-5">Back to the original results</Link>
+        </section>
+      )}
       {analysis.partial && (
         <p role="note" className="rounded-sm border border-ink-500 p-3 text-sm text-bone-500">
           This run did not finish every reaction, so the numbers below cover only what was recorded.
@@ -64,6 +78,18 @@ export default function Dashboard({ run }: { run: RunDetail }) {
         <Stat label="Strongest" value={label(analysis.strongest_segment_id)} sub={stat(analysis.strongest_segment_id) != null ? `panel avg ${stat(analysis.strongest_segment_id)!.toFixed(1)}` : undefined} />
         <Stat label="Weakest" value={label(analysis.weakest_segment_id)} sub={stat(analysis.weakest_segment_id) != null ? `panel avg ${stat(analysis.weakest_segment_id)!.toFixed(1)}` : undefined} />
         <Stat label="Collisions" value={String(analysis.collisions.length)} sub={`${analysis.drop_offs.length} drop-off point${analysis.drop_offs.length === 1 ? '' : 's'}`} />
+      </section>
+
+      <section aria-labelledby="meter-h">
+        <h2 id="meter-h" className="font-display text-2xl">The Brutality Meter</h2>
+        <p className="mt-1 mb-4 max-w-2xl text-sm text-bone-500">Every segment, rated by fixed rules over the simulated reactions.</p>
+        <BrutalityMeter meter={analysis.meter} onJump={jump} />
+      </section>
+
+      <section aria-labelledby="theatre-h">
+        <h2 id="theatre-h" className="font-display text-2xl">Audience theatre</h2>
+        <p className="mt-1 mb-4 max-w-2xl text-sm text-bone-500">Replay the reading in the order it happened.</p>
+        <AudienceTheatre segments={run.segments} reactions={run.reactions} mode="replay" />
       </section>
 
       <section aria-labelledby="heat-h">
@@ -78,6 +104,18 @@ export default function Dashboard({ run }: { run: RunDetail }) {
         <SegmentCompare segment={segment} reactions={run.reactions} focus={persona} />
       </section>
 
+      <section aria-labelledby="drop-h">
+        <h2 id="drop-h" className="font-display text-2xl">Where you lose them</h2>
+        <p className="mt-1 mb-4 max-w-2xl text-sm text-bone-500">Predicted drop-off from the simulated readers, with the sentence behind each exit.</p>
+        <RetentionCurve data={analysis.dropoff} onJump={jump} />
+      </section>
+
+      <section aria-labelledby="split-h">
+        <h2 id="split-h" className="font-display text-2xl">Audience split detector</h2>
+        <p className="mt-1 mb-4 max-w-2xl text-sm text-bone-500">Why an average can mislead: who the work is for, and where readers part ways.</p>
+        <SplitDetector data={analysis.split} onJump={jump} />
+      </section>
+
       <section aria-labelledby="col-h">
         <h2 id="col-h" className="mb-4 font-display text-2xl">Where the audience splits</h2>
         <CollisionPanel analysis={analysis} onJump={jump} />
@@ -87,6 +125,14 @@ export default function Dashboard({ run }: { run: RunDetail }) {
         <h2 id="ver-h" className="mb-4 font-display text-2xl">The Brutal Verdict</h2>
         <VerdictPanel runId={run.id} segments={run.segments} onJump={jump} />
       </section>
+
+      {run.kind === 'standard' && (
+        <section aria-labelledby="lab-h">
+          <h2 id="lab-h" className="font-display text-2xl">Revise and compare</h2>
+          <p className="mt-1 mb-4 max-w-2xl text-sm text-bone-500">Submit a new draft or test a hypothetical change, and see what moved.</p>
+          <RevisionLab run={run} />
+        </section>
+      )}
     </div>
   )
 }

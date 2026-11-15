@@ -23,6 +23,7 @@ export default function Workspace() {
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [blind, setBlind] = useState(true)
   const [health, setHealth] = useState<Health | null>(null)
   const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -70,7 +71,7 @@ export default function Workspace() {
     setSaving(true); setSaveError(null)
     try {
       const sub = await api.createSubmission(title.trim(), type, content)
-      const run = await api.startRun(sub.id, 'auto')
+      const run = await api.startRun(sub.id, 'auto', blind)
       navigate(`/run/${run.id}`)
     } catch (e) {
       setSaveError(e instanceof ApiError ? e.message : 'Could not start the simulation.')
@@ -151,6 +152,13 @@ export default function Workspace() {
           <button className="btn-primary" disabled={!canStart || saving} onClick={start}>
             {saving ? 'Seating the audience…' : 'Lock in & start audience →'}
           </button>
+          <label className="flex max-w-md cursor-pointer items-start gap-2 text-sm text-bone-300">
+            <input type="checkbox" className="mt-1 accent-[#f5b84a]" checked={blind} onChange={(e) => setBlind(e.target.checked)} />
+            <span>
+              <span className="font-mono text-xs uppercase tracking-wider">Blind audience test</span>
+              <span className="block text-xs text-bone-500">Keep your title from the readers, so it cannot give away the message or the ending.</span>
+            </span>
+          </label>
           {!title.trim() && segments.length > 0 && <span className="text-sm text-bone-500">Add a title to continue.</span>}
           {saveError && <span role="alert" className="text-sm text-persona-doom">{saveError}</span>}
         </div>
