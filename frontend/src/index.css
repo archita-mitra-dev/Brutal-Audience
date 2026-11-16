@@ -3,40 +3,73 @@
 @tailwind utilities;
 
 :root { color-scheme: dark; }
-
 html { scroll-behavior: smooth; }
-
-body {
-  @apply bg-ink-950 text-bone-100 font-sans antialiased;
-  /* faint lab-bench grid */
-  background-image:
-    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
-  background-size: 44px 44px;
-  background-attachment: fixed;
-}
-
-::selection { background: #f5b84a; color: #08090b; }
+body { @apply bg-ink-950 text-bone-100 font-sans antialiased; }
+::selection { background: #e05d44; color: #08090b; }
+/* The interface uses a hard editorial edge throughout, including legacy components. */
+:where([class*="rounded"]) { border-radius: 0 !important; }
 
 @layer components {
-  .eyebrow { @apply font-mono text-[11px] uppercase tracking-[0.22em] text-bone-500; }
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-lab px-6 py-3 font-mono text-sm font-medium
-           uppercase tracking-wider text-ink-950 transition hover:bg-[#ffc968] focus:outline-none
-           focus-visible:ring-2 focus-visible:ring-lab focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950
-           disabled:cursor-not-allowed disabled:opacity-40;
-  }
-  .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-ink-500 px-4 py-2 font-mono text-xs
-           uppercase tracking-wider text-bone-300 transition hover:border-bone-500 hover:text-bone-100
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-lab disabled:opacity-40;
-  }
-  .field {
-    @apply w-full rounded-sm border border-ink-600 bg-ink-900 px-3 py-2.5 text-bone-100 placeholder:text-bone-700
-           focus:border-lab focus:outline-none focus:ring-1 focus:ring-lab;
-  }
+  .eyebrow { @apply font-mono text-[10px] uppercase tracking-[0.18em] text-bone-500; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-3 bg-bone-100 px-5 py-3 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-ink-950 outline-offset-4 transition-colors hover:bg-lab focus:outline-none focus-visible:outline-2 focus-visible:outline-lab disabled:cursor-not-allowed disabled:opacity-40; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-2 border border-ink-500 px-4 py-[11px] font-mono text-[11px] uppercase tracking-[0.1em] text-bone-300 transition-colors hover:border-bone-300 hover:text-bone-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-lab disabled:opacity-40; }
+  .field { @apply w-full border border-ink-600 bg-ink-900 px-3 py-2.5 text-bone-100 placeholder:text-bone-700 focus:border-lab focus:outline-none focus:ring-1 focus:ring-lab; }
+  .app-page { @apply mx-auto max-w-6xl px-5 py-10 sm:py-14; }
+  .page-title { @apply mt-2 max-w-4xl font-display text-4xl leading-[.92] tracking-tight sm:text-6xl; }
+  .section-title { @apply font-display text-2xl leading-none tracking-tight sm:text-3xl; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
-}
+.app-page > .eyebrow:first-child { color: #f5b84a; }
+.workspace-layout { border-top: 1px solid #3a414d; padding-top: 2rem; }
+.account-ledger { border-top: 1px solid #3a414d; }
+.account-ledger > div { padding: .8rem 0; border-bottom: 1px solid #262b34; }
+.auth-page { max-width: 34rem; border-left: 1px solid #3a414d; min-height: calc(100vh - 57px); padding-left: clamp(1.25rem, 6vw, 5rem); }
+.auth-page form { border-top: 1px solid #3a414d; padding-top: 1.5rem; }
+.run-progress { border-top: 1px solid #3a414d; border-bottom: 1px solid #3a414d; padding: 1.25rem 0; }
+.summary-ledger { border-top: 1px solid #3a414d; }
+.summary-ledger > div { display: grid; grid-template-columns: minmax(8rem, .75fr) 1fr minmax(11rem, 1.2fr); align-items: baseline; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #3a414d; }
+.summary-ledger .eyebrow { color: #8d8a82; }.summary-ledger .stat-value { font: 1.7rem/1 Georgia, serif; color: #f2efe8; }.summary-ledger .stat-sub { font-size: .75rem; color: #8d8a82; }
+.dashboard-section { border-top: 1px solid #262b34; padding-top: 2rem; }
+.dashboard-section > h2 { color: #f2efe8; }
+.dashboard > section { border-top: 1px solid #262b34; padding-top: 2rem; }
+@media (max-width: 640px) { .auth-page { border-left: 0; }.summary-ledger > div { grid-template-columns: 1fr 1fr; }.summary-ledger .stat-sub { grid-column: 1 / -1; } }
+
+.landing-shell { max-width: 1440px; margin: 0 auto; }
+.landing-hero { min-height: calc(100vh - 57px); padding: 1.25rem clamp(1.25rem, 4vw, 4rem) 2rem; display: flex; flex-direction: column; border-bottom: 1px solid #262b34; }
+.landing-kicker, .landing-footer { display: flex; justify-content: space-between; gap: 1rem; font: 10px/1.3 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .13em; color: #8d8a82; }
+.landing-headline { flex: 1; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(17rem, .55fr); gap: 3rem; align-content: center; padding: 5rem 0; }
+.landing-headline h1, .landing-section-heading h2, .landing-close h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; letter-spacing: -.055em; }
+.landing-headline h1 { margin-top: .85rem; font-size: clamp(3.5rem, 8.4vw, 8.6rem); line-height: .86; }
+.landing-headline h1 em { color: #f5b84a; font-weight: 400; }
+.landing-intro { align-self: end; max-width: 28rem; font-size: 1rem; line-height: 1.65; color: #c9c5ba; }
+.landing-manifesto { display: grid; grid-template-columns: 1fr 2fr 2fr; gap: 2rem; padding-top: 1.2rem; border-top: 1px solid #3a414d; align-items: start; }
+.landing-manifesto > p:nth-child(2) { font: 1.25rem/1.2 Georgia, serif; max-width: 18rem; }
+.landing-manifesto dl { display: grid; grid-template-columns: repeat(3, 1fr); }
+.landing-manifesto dl div { border-left: 1px solid #3a414d; padding-left: 1rem; }
+.landing-manifesto dt { font: 2rem/1 Georgia, serif; color: #f2efe8; }
+.landing-manifesto dd { margin-top: .4rem; color: #8d8a82; font-size: .72rem; line-height: 1.35; }
+.landing-method, .landing-readthrough, .landing-steps, .landing-panel { padding: clamp(4rem, 9vw, 8rem) clamp(1.25rem, 4vw, 4rem); border-bottom: 1px solid #262b34; }
+.landing-method { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+.landing-section-heading h2 { margin-top: .8rem; max-width: 35rem; font-size: clamp(2.3rem, 4.4vw, 4.75rem); line-height: .93; }
+.landing-method-copy { max-width: 33rem; display: grid; gap: 1.5rem; font-size: 1.1rem; line-height: 1.65; }
+.landing-readthrough { display: grid; grid-template-columns: .75fr 1.25fr; gap: clamp(2rem, 7vw, 7rem); align-items: center; }
+.landing-readthrough-copy h2 { font: 400 clamp(2.4rem, 4vw, 4rem)/.95 Georgia, serif; letter-spacing: -.045em; margin: .8rem 0 1.3rem; }
+.landing-readthrough-copy > p:not(.eyebrow) { color: #c9c5ba; line-height: 1.65; margin-bottom: 1.5rem; }
+.landing-readthrough figure { border-color: #3a414d; background: #0d0f12; border-radius: 0; }
+.landing-steps { display: grid; grid-template-columns: .8fr 1.2fr; gap: 4rem; }
+.landing-steps ol { border-top: 1px solid #3a414d; }
+.landing-steps li { display: grid; grid-template-columns: 3rem minmax(10rem, .65fr) 1fr; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid #3a414d; }
+.landing-steps li > span { font: 10px "IBM Plex Mono", monospace; color: #f5b84a; padding-top: .3rem; }
+.landing-steps h3, .persona-ledger h3 { font: 1.25rem/1 Georgia, serif; }
+.landing-steps p { font-size: .88rem; line-height: 1.5; color: #8d8a82; }
+.landing-panel { background: #0d0f12; }
+.persona-ledger { margin-top: 4rem; border-top: 1px solid #3a414d; }
+.persona-ledger article { min-height: 7.5rem; display: grid; grid-template-columns: 3rem 2rem minmax(12rem, 1fr) minmax(14rem, .9fr); gap: 1rem; align-items: center; border-bottom: 1px solid #3a414d; }
+.persona-index, .persona-watch span { font: 10px "IBM Plex Mono", monospace; letter-spacing: .1em; color: #8d8a82; }
+.persona-mark { font-size: 1.2rem; }.persona-ledger h3 { color: #f2efe8; }.persona-ledger h3 + p { margin-top: .35rem; font-size: .85rem; font-style: italic; color: #8d8a82; }
+.persona-watch { color: #c9c5ba; font-size: .85rem; line-height: 1.45; }.persona-watch span { display: block; margin-bottom: .25rem; text-transform: uppercase; }
+.landing-close { padding: clamp(5rem, 12vw, 11rem) 1.25rem; text-align: center; border-bottom: 1px solid #262b34; }.landing-close h2 { max-width: 50rem; margin: 1rem auto 2.5rem; font-size: clamp(3rem, 7vw, 7rem); line-height: .88; }.landing-close > p:last-child { margin: 1.25rem auto 0; max-width: 27rem; font-size: .75rem; line-height: 1.5; color: #8d8a82; }
+.landing-footer { padding: 1.2rem clamp(1.25rem, 4vw, 4rem); }
+
+@media (max-width: 700px) { .landing-kicker span:last-child { display:none; }.landing-headline, .landing-method, .landing-readthrough, .landing-steps { grid-template-columns: 1fr; gap: 2rem; }.landing-headline { padding: 4.5rem 0; }.landing-manifesto { grid-template-columns: 1fr; gap: 1.4rem; }.landing-manifesto dl { grid-template-columns: repeat(3, 1fr); }.landing-manifesto dl div { padding-left: .6rem; }.landing-manifesto dt { font-size: 1.5rem; }.landing-steps li { grid-template-columns: 2.25rem 1fr; }.landing-steps li p { grid-column: 2; }.persona-ledger article { grid-template-columns: 2rem 1.5rem 1fr; padding: 1rem 0; }.persona-watch { grid-column: 3; }.landing-footer span:nth-child(2) { display:none; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

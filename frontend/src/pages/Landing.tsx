@@ -3,130 +3,106 @@ import SimulationPreview from '../components/SimulationPreview'
 import { PERSONAS } from '../lib/personas'
 
 const STEPS = [
-  { n: '01', title: 'Submit your work', body: 'Paste or upload a story, screenplay, lyrics or article. It is stored exactly as written and never edited.' },
-  { n: '02', title: 'Watch your audience', body: 'Four AI personas read it one segment at a time, with live reactions in the audience theatre. No peeking at the ending.' },
-  { n: '03', title: 'See where you lose them', body: 'Interactive heatmap, Brutality Meter, retention curve and the exact sentence behind each predicted drop-off.' },
-  { n: '04', title: 'Understand the disagreement', body: 'The split detector explains why a genre fan loves what a casual newcomer cannot follow, instead of hiding it in an average.' },
-  { n: '05', title: 'Get your Brutal Verdict', body: 'Strengths, weaknesses, verbatim evidence and three specific, segment-linked things to look at.' },
-  { n: '06', title: 'Experiment with revisions', body: 'Submit version 2 or ask "what if the opening were shorter?" and see what improved, what weakened and what was resolved.' },
-]
-
-const FEATURES = [
-  ['Live Audience Theatre', 'Watch the four readers react as it happens.'],
-  ['Brutality Meter', 'Fixed, published thresholds. No model decides the label.'],
-  ['Blind Audience Test', 'Personas never see your name, your intent or the ending.'],
-  ['What If?', 'Hypothetical edits, clearly labelled as simulations.'],
+  ['01', 'Submit the draft', 'Paste or upload a story, screenplay, lyrics, or article. It stays exactly as written.'],
+  ['02', 'Seat the panel', 'Four distinct readers move through it in order, with no knowledge of the ending.'],
+  ['03', 'Find the fracture', 'See the passages that pull attention forward, lose it, or divide the room.'],
+  ['04', 'Take a second pass', 'Compare a revision or test a precise hypothetical before you change the work.'],
 ] as const
 
 export default function Landing() {
   return (
-    <main>
-      {/* HERO */}
-      <section className="relative overflow-hidden border-b border-ink-700/70">
-        <div className="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:pt-24">
-          <p className="eyebrow animate-rise">Creative testing laboratory</p>
-          <h1 className="mt-5 max-w-4xl animate-rise font-display text-5xl font-semibold leading-[1.02] tracking-tight [animation-delay:80ms] sm:text-7xl">
-            Rehearse your audience <em className="font-normal italic text-lab">before</em> you meet them.
-          </h1>
-          <p className="mt-4 font-mono text-sm uppercase tracking-[0.18em] text-bone-300 animate-rise [animation-delay:120ms]">Four perspectives. Zero sugarcoating.</p>
-          <p className="mt-7 max-w-2xl animate-rise text-lg leading-relaxed text-bone-300 [animation-delay:160ms]">
-            Brutal Audience puts your draft in front of a panel of simulated readers. They react as they go,
-            paragraph by paragraph, and tell you where they leaned in, got lost, or walked out.
-            <span className="text-bone-100"> They never rewrite a word of it.</span>
-          </p>
-          <div className="mt-10 flex animate-rise flex-wrap items-center gap-4 [animation-delay:240ms]">
-            <Link to="/workspace" className="btn-primary">Test your work →</Link>
-            <a href="#how" className="btn-ghost">See how it works</a>
+    <main className="landing-shell">
+      <section className="landing-hero">
+        <div className="landing-kicker">
+          <span>Brutal Audience / issue 01</span>
+          <span>For writers who want the real notes</span>
+        </div>
+
+        <div className="landing-headline">
+          <div>
+            <p className="eyebrow !text-bone-500">A private reading room</p>
+            <h1>Before you send it out,<br /><em>hear the room.</em></h1>
+          </div>
+          <div className="landing-intro">
+            <p>Put a draft in front of a simulated audience and follow their response, passage by passage. No rewrite button. No polite blur. Just an honest reading experience.</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link to="/workspace" className="btn-primary">Run a reading <span aria-hidden>→</span></Link>
+              <a href="#method" className="btn-ghost">The method</a>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* PROBLEM / SOLUTION */}
-      <section className="mx-auto grid max-w-6xl gap-px bg-ink-700/60 px-0 sm:grid-cols-2 sm:px-5 sm:py-0">
-        <div className="bg-ink-950 p-7 sm:p-10">
-          <p className="eyebrow text-persona-doom">The problem</p>
-          <h2 className="mt-3 font-display text-2xl leading-snug">Honest feedback arrives too late — or never.</h2>
-          <ul className="mt-5 space-y-3 text-bone-300">
-            <li>Friends are kind, so their notes are soft.</li>
-            <li>Professional critics show up after you have published.</li>
-            <li>Most AI writing tools quietly turn your draft into <em>their</em> draft.</li>
-          </ul>
-        </div>
-        <div className="bg-ink-950 p-7 sm:p-10">
-          <p className="eyebrow text-persona-fan">The experiment</p>
-          <h2 className="mt-3 font-display text-2xl leading-snug">An audience, not a co-writer.</h2>
-          <ul className="mt-5 space-y-3 text-bone-300">
-            <li>Four distinct personas read your work progressively, like real people do.</li>
-            <li>Every reaction points at the exact passage that caused it.</li>
-            <li>Where they disagree is shown, not smoothed over. A divisive draft can still be a good one.</li>
-          </ul>
+        <div className="landing-manifesto">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-bone-500">The premise</p>
+          <p>Good work deserves a first audience before it meets its permanent one.</p>
+          <dl>
+            <div><dt>04</dt><dd>reader perspectives</dd></div>
+            <div><dt>01</dt><dd>draft, never rewritten</dd></div>
+            <div><dt>∞</dt><dd>revisions to examine</dd></div>
+          </dl>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="how" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-20">
-        <p className="eyebrow">How a test runs</p>
-        <h2 className="mt-3 max-w-2xl font-display text-3xl leading-tight sm:text-4xl">
-          Watch attention move through your draft.
-        </h2>
-        <div className="mt-10"><SimulationPreview /></div>
+      <section id="method" className="landing-method">
+        <div className="landing-section-heading">
+          <p className="eyebrow !text-bone-500">The method</p>
+          <h2>A reader is not a co-writer.</h2>
+        </div>
+        <div className="landing-method-copy">
+          <p>Most feedback is either too kind, too late, or quietly turns into a rewrite. This is a place to observe a reading, not outsource your voice.</p>
+          <p className="text-bone-500">The panel flags its evidence, keeps disagreements visible, and marks every result as a simulation—not measured audience data.</p>
+        </div>
+      </section>
 
-        <ol className="mt-12 grid gap-px bg-ink-700/60 sm:grid-cols-2 lg:grid-cols-3">
-          {STEPS.map((s) => (
-            <li key={s.n} className="bg-ink-950 p-6">
-              <span className="font-mono text-xs text-lab">{s.n}</span>
-              <h3 className="mt-3 font-display text-lg">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-bone-500">{s.body}</p>
+      <section className="landing-readthrough" aria-labelledby="readthrough-heading">
+        <div className="landing-readthrough-copy">
+          <p className="eyebrow !text-bone-500">Inside a reading</p>
+          <h2 id="readthrough-heading">Attention has a trail.</h2>
+          <p>Follow four readings across the same twelve segments. A warm cell marks engagement; the outline marks the passage currently being read.</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-bone-500">Illustration only · not a promise of results</p>
+        </div>
+        <SimulationPreview />
+      </section>
+
+      <section className="landing-steps" aria-labelledby="steps-heading">
+        <div className="landing-section-heading">
+          <p className="eyebrow !text-bone-500">A complete pass</p>
+          <h2 id="steps-heading">Four moves. No theatre.</h2>
+        </div>
+        <ol>
+          {STEPS.map(([number, title, description]) => (
+            <li key={number}>
+              <span>{number}</span><h3>{title}</h3><p>{description}</p>
             </li>
           ))}
         </ol>
       </section>
 
-      {/* FEATURES */}
-      <section className="mx-auto grid max-w-6xl gap-px bg-ink-700/60 px-0 sm:grid-cols-2 sm:px-5 lg:grid-cols-4">
-        {FEATURES.map(([t, d]) => (
-          <div key={t} className="bg-ink-950 p-6">
-            <h3 className="font-display text-lg text-lab">{t}</h3>
-            <p className="mt-2 text-sm text-bone-500">{d}</p>
-          </div>
-        ))}
-      </section>
-
-      {/* PERSONAS */}
-      <section className="border-y border-ink-700/70 bg-ink-900/50">
-        <div className="mx-auto max-w-6xl px-5 py-20">
-          <p className="eyebrow">The panel</p>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl">Four readers. Four different problems.</h2>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {PERSONAS.map((p) => (
-              <article key={p.key} className="rounded-sm border border-ink-600 bg-ink-900 p-5 transition hover:-translate-y-0.5" style={{ borderTopColor: p.color, borderTopWidth: 2 }}>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl" style={{ color: p.color }} aria-hidden>{p.glyph}</span>
-                  <h3 className="font-display text-lg">{p.name}</h3>
-                </div>
-                <p className="mt-3 text-sm italic text-bone-300">{p.tagline}</p>
-                <p className="mt-4 font-mono text-[11px] uppercase tracking-wider text-bone-500">Watches for</p>
-                <p className="mt-1 text-sm text-bone-300">{p.watchesFor}</p>
-              </article>
-            ))}
-          </div>
+      <section className="landing-panel" aria-labelledby="panel-heading">
+        <div className="landing-section-heading">
+          <p className="eyebrow !text-bone-500">The panel</p>
+          <h2 id="panel-heading">Four readers, four blind spots.</h2>
+        </div>
+        <div className="persona-ledger">
+          {PERSONAS.map((persona, index) => (
+            <article key={persona.key}>
+              <span className="persona-index">0{index + 1}</span>
+              <span className="persona-mark" style={{ color: persona.color }} aria-hidden>{persona.glyph}</span>
+              <div><h3>{persona.name}</h3><p>{persona.tagline}</p></div>
+              <p className="persona-watch"><span>Watches for</span>{persona.watchesFor}</p>
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* PRINCIPLE + CTA */}
-      <section className="mx-auto max-w-4xl px-5 py-24 text-center">
-        <p className="font-display text-2xl italic leading-snug text-bone-300 sm:text-3xl">
-          “It does not create the art. It helps creators understand the people who experience it.”
-        </p>
-        <p className="mx-auto mt-6 max-w-xl text-sm text-bone-500">
-          These are simulated audience reactions and predicted drop-off points, not measured audience retention. Treat scores as a conversation starter, not a measurement.
-        </p>
-        <Link to="/workspace" className="btn-primary mt-10">Test your work →</Link>
+      <section className="landing-close">
+        <p className="eyebrow !text-bone-500">Open the reading room</p>
+        <h2>Your work. Their unvarnished attention.</h2>
+        <Link to="/workspace" className="btn-primary">Test a draft <span aria-hidden>→</span></Link>
+        <p>Simulated reactions are a thinking tool, not a replacement for real readers.</p>
       </section>
 
-      <footer className="border-t border-ink-700/70 py-8 text-center font-mono text-[11px] uppercase tracking-widest text-bone-700">
-        Brutal Audience · your work stays yours
-      </footer>
+      <footer className="landing-footer"><span>Brutal Audience</span><span>Your work stays yours</span><span>© 2026</span></footer>
     </main>
   )
 }

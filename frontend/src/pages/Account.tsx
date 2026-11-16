@@ -19,10 +19,10 @@ export default function Account() {
   }
 
   return (
-    <main className="mx-auto max-w-xl px-5 py-16">
+    <main className="app-page max-w-3xl py-16">
       <p className="eyebrow">Account</p>
-      <h1 className="mt-3 font-display text-4xl">{user.display_name}</h1>
-      <dl className="mt-8 space-y-3 text-sm">
+      <h1 className="page-title">{user.display_name}</h1>
+      <dl className="account-ledger mt-8 text-sm">
         <div className="flex gap-4"><dt className="w-24 text-bone-500">Email</dt><dd>{user.email}</dd></div>
         <div className="flex gap-4"><dt className="w-24 text-bone-500">Joined</dt><dd>{new Date(user.created_at).toLocaleDateString()}</dd></div>
       </dl>

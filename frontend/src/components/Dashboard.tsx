@@ -15,10 +15,10 @@ import VerdictPanel from './VerdictPanel'
 
 function Stat({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="rounded-sm border border-ink-600 bg-ink-900 p-4">
+    <div>
       <p className="eyebrow">{label}</p>
-      <p className="mt-2 font-display text-3xl">{value}</p>
-      {sub && <p className="mt-1 text-xs text-bone-500">{sub}</p>}
+      <p className="stat-value">{value}</p>
+      {sub && <p className="stat-sub">{sub}</p>}
     </div>
   )
 }
@@ -59,7 +59,7 @@ export default function Dashboard({ run }: { run: RunDetail }) {
   const stat = (id: number | null) => analysis.segments.find((s) => s.segment_id === id)?.mean
 
   return (
-    <div className="mt-10 space-y-14">
+    <div className="dashboard mt-10 space-y-14">
       {run.baseline_run_id && (
         <section aria-labelledby="rev-h">
           <h2 id="rev-h" className="mb-4 font-display text-2xl">{run.kind === 'whatif' ? 'What if: how it compares' : 'Revision impact'}</h2>
@@ -73,7 +73,7 @@ export default function Dashboard({ run }: { run: RunDetail }) {
         </p>
       )}
 
-      <section aria-label="Summary" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <section aria-label="Summary" className="summary-ledger">
         <Stat label="Panel average" value={analysis.overall_mean === null ? '–' : `${analysis.overall_mean.toFixed(1)}/10`} sub="mean engagement across all reactions" />
         <Stat label="Strongest" value={label(analysis.strongest_segment_id)} sub={stat(analysis.strongest_segment_id) != null ? `panel avg ${stat(analysis.strongest_segment_id)!.toFixed(1)}` : undefined} />
         <Stat label="Weakest" value={label(analysis.weakest_segment_id)} sub={stat(analysis.weakest_segment_id) != null ? `panel avg ${stat(analysis.weakest_segment_id)!.toFixed(1)}` : undefined} />

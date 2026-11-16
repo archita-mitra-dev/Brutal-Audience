@@ -57,13 +57,13 @@ export default function RunPage() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-10">
+    <main className="app-page">
       <p className="eyebrow">Step 3 of 3 · {finished ? 'Results' : 'The reading room'}</p>
       <h1 className="mt-2 font-display text-3xl sm:text-4xl">“{run.title}”</h1>
       <div className="mt-4 space-y-3"><ModeBanner mode={run.mode} model={run.model} /><BlindBadge blind={run.blind} /></div>
 
       {/* progress */}
-      <section aria-label="Simulation progress" className="mt-6">
+      <section aria-label="Simulation progress" className="run-progress mt-6">
         <div className="flex items-center justify-between gap-4">
           <p className="font-mono text-xs uppercase tracking-wider text-bone-300" aria-live="polite">
             {run.status === 'running' || run.status === 'queued'

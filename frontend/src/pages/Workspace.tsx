@@ -82,14 +82,14 @@ export default function Workspace() {
   const canStart = title.trim().length > 0 && segments.length > 0 && !segLoading && !segError
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-10">
+    <main className="app-page">
       <p className="eyebrow">Step 1 of 3 · Creative workspace</p>
-      <h1 className="mt-2 font-display text-3xl sm:text-4xl">Put your work on the table.</h1>
+      <h1 className="page-title">Put your work on the table.</h1>
       <p className="mt-2 max-w-2xl text-bone-500">
         Your text is kept exactly as you write it. Nothing here edits, rewrites or “improves” it.
       </p>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+      <div className="workspace-layout mt-8 grid gap-8 lg:grid-cols-2">
         {/* LEFT: input */}
         <section aria-labelledby="draft-h" className="space-y-5">
           <h2 id="draft-h" className="sr-only">Your draft</h2>

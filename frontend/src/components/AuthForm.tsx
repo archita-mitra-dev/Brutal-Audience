@@ -34,9 +34,9 @@ export default function AuthForm({ mode }: { mode: 'login' | 'register' }) {
   }
 
   return (
-    <main className="mx-auto max-w-md px-5 py-16 sm:py-24">
+    <main className="auth-page mx-auto py-16 pr-5 sm:py-24">
       <p className="eyebrow">{isRegister ? 'Create your lab account' : 'Welcome back'}</p>
-      <h1 className="mt-3 font-display text-4xl leading-tight">{isRegister ? 'Get an audience.' : 'Log in.'}</h1>
+      <h1 className="page-title">{isRegister ? 'Get an audience.' : 'Log in.'}</h1>
       <p className="mt-3 text-sm text-bone-500">
         {isRegister
           ? 'Your drafts and results are private to your account, and you can delete them, or the account, at any time.'

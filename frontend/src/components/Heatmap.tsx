@@ -76,7 +76,7 @@ export default function Heatmap({ segments, reactions, analysis, selectedSegment
                       aria-label={label}
                       aria-pressed={isSel}
                       onClick={() => onSelect(s.id, p.key)}
-                      className="flex items-center justify-center rounded-[2px] text-[9px] font-medium leading-none transition-transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-lab disabled:cursor-default"
+                      className="flex items-center justify-center rounded-[2px] text-[9px] font-medium leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-lab disabled:cursor-default"
                       style={{
                         height: CELL,
                         background: !r ? '#171a20' : r.status === 'failed' ? '#2a1f22' : heat(r.engagement_score ?? 0),
@@ -124,7 +124,11 @@ export default function Heatmap({ segments, reactions, analysis, selectedSegment
         <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 pl-[9.75rem] font-mono text-[10px] uppercase tracking-widest text-bone-500">
           <span className="flex items-center gap-2">
             0
-            <span className="h-2 w-24" style={{ background: `linear-gradient(90deg, ${heat(0)}, ${heat(5)}, ${heat(10)})` }} aria-hidden />
+            <span className="flex h-2 w-24" aria-hidden>
+              <i className="flex-1" style={{ background: heat(0) }} />
+              <i className="flex-1" style={{ background: heat(5) }} />
+              <i className="flex-1" style={{ background: heat(10) }} />
+            </span>
             10 engagement
           </span>
           <span><span className="text-lab">◆</span> audience collision</span>

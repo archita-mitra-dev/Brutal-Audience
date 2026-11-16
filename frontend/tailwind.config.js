@@ -15,7 +15,7 @@ export default {
         },
       },
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
+        display: ['Georgia', 'Times New Roman', 'serif'],
         sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },

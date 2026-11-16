@@ -11,11 +11,11 @@ import Workspace from './pages/Workspace'
 function Header() {
   const { user, loading } = useAuth()
   return (
-    <header className="sticky top-0 z-30 border-b border-ink-700/70 bg-ink-950/80 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-ink-700 bg-ink-950">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
         <Link to="/" className="flex items-baseline gap-2">
           <span className="font-display text-lg font-semibold tracking-tight">Brutal Audience</span>
-          <span className="eyebrow hidden sm:inline">lab / v0.8</span>
+          <span className="eyebrow hidden sm:inline">Reading room</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-3">
           {loading ? null : user ? (
