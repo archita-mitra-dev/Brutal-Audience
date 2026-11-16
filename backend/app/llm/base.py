@@ -76,6 +76,17 @@ async def post_json_with_retry(
                 except ValueError as exc:
                     raise LLMError("The model API returned a non-JSON response.") from exc
             detail = _error_detail(resp)
+            # Gemini reports exhausted project/model quota as HTTP 429 too. It
+            # will not recover by retrying every segment, so stop the run with
+            # an actionable error. Ordinary short-lived 429 throttling remains
+            # retryable.
+            if resp.status_code == 429 and any(
+                marker in detail.casefold()
+                for marker in ("quota exceeded", "current quota", "billing details")
+            ):
+                raise FatalLLMError(
+                    f"Model quota is exhausted (429): {detail}. Check your provider quota or billing, then start a new run."
+                )
             if resp.status_code in _FATAL:
                 raise FatalLLMError(f"Model API rejected the request ({resp.status_code}): {detail}")
             last = f"model API error {resp.status_code}: {detail}"
