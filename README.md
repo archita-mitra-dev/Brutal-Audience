@@ -2,7 +2,7 @@
 
 > **Rehearse your audience before you meet them.**
 
-*Generative AI · Creative Technology · Audience Simulation* — built for the Generative Clash hackathon, Open Track (tools that assist creative artists).
+*Generative AI · Creative Technology · Audience Simulation* — built for the Generative Clash hackathon, Storytelling and Co-Writers track.
 
 Brutal Audience is a creative audience-simulation platform. A creator pastes a story, script, lyrics or essay; four AI reader personas read it **one segment at a time**, reacting as they go; the creator sees where attention rises, collapses or splits, and can test revisions and "what if" changes. **It never rewrites the work.** It does not create the art. It helps creators understand the people who experience it.
 
@@ -12,7 +12,7 @@ Brutal Audience is a creative audience-simulation platform. A creator pastes a s
 
 ## Demo
 
-All media below was captured from the running app in **demo mode** (no API key; plain text statistics, **not an AI audience**), using the sample story "The Dark Lighthouse". Demo mode makes the whole flow reproducible offline; with a key, the same screens show live model reactions.
+All media below was captured from the running app in **demo mode** using the sample story "The Dark Lighthouse". Demo mode makes the whole flow reproducible offline; with a key, the same screens show live model reactions.
 
 [![Walkthrough](docs/media/demo-walkthrough.gif)](docs/media/demo-walkthrough.mp4)
 
