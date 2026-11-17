@@ -180,7 +180,6 @@ Authors and writers (pacing, clarity, character), screenwriters and video-script
 - Results are **simulated audience reactions and predicted drop-off points**, not measured audience retention or guaranteed predictions. Scores are subjective model estimates, not validated measurements. The UI says so wherever results appear.
 - The platform never rewrites, edits or alters uploaded work. Recommendations only.
 - Content is private to the account that created it and is never used for model training by this app. Users can delete a draft, or their whole account and all data, at any time.
-- Demo mode is labelled everywhere as "not an AI audience".
 - What-if results are labelled hypothetical, and small score changes between runs are flagged as noise.
 - Planned cultural and accessibility analyses will be presented with uncertainty and will not replace testing with real people.
 - More detail: [Honest limitations](#honest-limitations).
