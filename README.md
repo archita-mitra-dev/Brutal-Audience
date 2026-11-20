@@ -126,7 +126,7 @@ flowchart LR
     ORCH --> ENG["Sequential Simulation Engine<br/>4 personas in parallel,<br/>each strictly in order"]
     ENG --> PR["Persona Engine<br/>definitions + prompt assembly<br/>(no-leak, blind)"]
     ENG --> VAL["Validation<br/>schema, verbatim-evidence check,<br/>retry with correction"]
-    PR --> LLM["LLM adapter<br/>Gemini / OpenAI-compatible"]
+    PR --> LLM["LLM adapter<br/>OpenRouter / OpenAI-compatible"]
     ENG -.no key.-> DEMO["Demo backend<br/>(statistics, not AI)"]
     ENG --> DB[("SQLite<br/>users, submissions, segments,<br/>runs, reactions, verdicts")]
     DB --> AGG["Aggregation and Analysis Engine<br/>heatmap stats, Brutality Meter,<br/>collisions, drop-off, split, compare"]
@@ -143,7 +143,7 @@ flowchart LR
 | Content Segmenter | Ordered segments whose text is exactly `content[start:end]` | `segmenter.py` |
 | Persona Engine | Persona definitions and prompt assembly; **no future leakage**, blind mode | `personas/` |
 | Sequential Simulation Engine | Parallel personas, strictly ordered reading, retries, cancellation | `simulation/` |
-| LLM Integration | One small interface, Gemini and OpenAI-style adapters, backoff on 429/5xx | `llm/` |
+| LLM Integration | One small interface for OpenRouter and other OpenAI-compatible providers, with backoff on 429/5xx | `llm/` |
 | Aggregation / Collision / Split / Drop-off / Meter / Compare | Pure, deterministic arithmetic over stored reactions | `analysis/` |
 | Report Generator | Brutal Verdict: numbers computed in code, model writes only the narrative, every quote and segment ID validated | `analysis/verdict.py` |
 | Database | Sessions, reactions and reports persisted; cascade delete on account removal | `db.py`, `run_store.py` |
@@ -164,7 +164,7 @@ flowchart LR
 | Visualisation | Recharts and CSS grid (heatmap, retention curve, engagement chart) |
 | Backend | Python, FastAPI |
 | Data validation | Pydantic v2 (API models, LLM reply validation) |
-| AI integration | Provider-agnostic adapter: Google Gemini, or any OpenAI-compatible endpoint (`LLM_PROVIDER`, `LLM_BASE_URL`, `LLM_MODEL`) |
+| AI integration | Provider-agnostic adapter: OpenRouter, or any OpenAI-compatible endpoint (`LLM_PROVIDER`, `LLM_BASE_URL`, `LLM_MODEL`) |
 | Auth | scrypt password hashing, signed JWT bearer tokens |
 | Database | SQLite (WAL mode) |
 | Testing | pytest (151 backend tests, no network or key needed) |
@@ -223,15 +223,16 @@ cp .env.example .env
 uvicorn app.main:app --reload --port 8000
 ```
 
-With no key the app runs in **demo mode**. To use real AI personas, edit `backend/.env`:
+With no key the app runs in **demo mode**. To use real AI personas with OpenRouter's free-model route, edit `backend/.env`:
 
 ```
-LLM_PROVIDER=gemini
-LLM_API_KEY=your-key
-LLM_MODEL=<a current model ID from Google AI Studio>
+LLM_PROVIDER=openai_compat
+LLM_BASE_URL=https://openrouter.ai/api/v1
+LLM_API_KEY=your-openrouter-key
+LLM_MODEL=openrouter/free
 ```
 
-`LLM_MODEL` has no default on purpose, because model IDs get retired. (Use `LLM_PROVIDER=openai_compat` plus `LLM_BASE_URL` for OpenAI-style providers.) Check `GET /api/health`: `mode_default` shows `live` once both key and model are set.
+`LLM_MODEL` has no default on purpose, because provider model IDs can change. Use `LLM_PROVIDER=openai_compat` plus an endpoint-specific `LLM_BASE_URL` for other OpenAI-style providers. Check `GET /api/health`: `mode_default` shows `live` once both key and model are set.
 
 Tests (151, no network or key needed):
 
@@ -278,7 +279,7 @@ backend/app/
 ├── main.py  config.py  db.py  run_store.py  schemas.py
 ├── segmenter.py  file_parser.py
 ├── personas/        definitions.py (the 4 personas)  prompts.py (prompt assembly)
-├── llm/             base.py  gemini.py  openai_compat.py  factory.py
+├── llm/             base.py  provider adapters  factory.py
 ├── simulation/      engine.py  backends.py (live + demo)  validation.py  types.py
 ├── analysis/        stats.py (collisions, drop-offs)  meter.py  dropoff.py  split.py  compare.py  verdict.py  models.py
 └── routes/          content.py  runs.py  analysis.py
@@ -299,7 +300,7 @@ frontend/src/
 ## Honest limitations
 
 - Simulated personas are an informed guess, not real readers; scores are subjective estimates.
-- The Gemini and OpenAI-compatible adapters are tested against a mocked HTTP server (request shape, retries, errors), not against the live APIs, since that needs your key. The first real run is the real test.
+- The provider adapters are tested against a mocked HTTP server (request shape, retries, errors), not against live APIs, since those need your key. The first real run is the real test.
 - Concurrency is per run (4 personas at once). There is no global rate limiter, so heavy parallel use on a free API tier may hit 429s (they are retried with backoff).
 - Render's free disk is ephemeral, so SQLite data resets on redeploy.
 - Long works only keep the most recent ~6,000 characters of already-read text in each prompt. Earlier segments are carried through the persona's own reactions.
